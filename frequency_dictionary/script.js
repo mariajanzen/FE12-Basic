@@ -1,10 +1,8 @@
 function frequencyDictionary(str) {
     const dictionary = {};
 
-    const wordsArray = str.split(/[\s.,?:!;\-"]+/)
-        .filter(function(el) {
-            return el.length !== 0
-        });
+    const wordsArray = wordsStringToArray(str);
+
     console.log(wordsArray);
 
     for (let i = 0; i < wordsArray.length; i++) {
@@ -14,33 +12,39 @@ function frequencyDictionary(str) {
             dictionary[wordsArray[i]] = 1;
         }
     }
-
     return dictionary;
 }
 
-function onButtonClick(){
-    const text = document.getElementById('textForAmnalysis').value;
-    if (text == '') {
-        document.querySelector('textarea#textForAmnalysis + div.invalid-feedback').style.display = 'block';
-        /*
-        Or you can use this selector
-        document.getElementsByClassName('invalid-feedback')[0].style.display = 'block';
-*/
+function wordsStringToArray(str) {
+    return str.split(/[\s.,?:!;\-"]+/)
+        .filter(function(el) {
+            return el.length !== 0
+        });
+}
+
+function onButtonClick() {
+    const text = document.getElementById('textForAnalysis').value;
+    if (text === '') {
+        document.querySelector('.input-group div.invalid-feedback.empty').style.display = 'block';
         return;
     }
-    console.log(frequencyDictionary(text));
-    insertIntoTable
+    if (wordsStringToArray(text).length < 2 ) {
+        document.querySelector('.input-group div.invalid-feedback.minvalue').style.display = 'block';
+        return;
+    }
+    insertIntoTable(frequencyDictionary(text));
 }
 
 function handleOnFocus() {
-    document.querySelector('textarea#textForAmnalysis + div.invalid-feedback').style.display = 'none';
+    for (const element of document.querySelectorAll('.input-group div.invalid-feedback')) {
+        element.style.display = 'none';
+    }
 }
 
-insertIntoTable(wordsObject) {
-
+function insertIntoTable(wordsObject) {
+    const element = document.querySelector('table.table tbody');
+    /* <tr><th scope="row">1</th><td>this</td><td>20</td></tr> */
+    for (const word in wordsObject) {
+        console.log(word, wordsObject[word]);
+    }
 }
-
-
-
-
-//console.log(frequencyDictionary('Отец мой Андрей Петрович Гринев в молодости своей служил при графе Минихе и вышел в отставку премьер-майором в 17.. году. С тех пор жил он в своей Симбирской деревне, где и женился на девице Авдотье Васильевне Ю., дочери бедного тамошнего дворянина. Нас было девять человек детей. Все мои братья и сестры умерли во младенчестве.'));
