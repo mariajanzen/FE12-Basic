@@ -29,11 +29,17 @@ function onButtonClick(){
         return;
     }
     console.log(frequencyDictionary(text));
+    insertIntoTable
 }
 
 function handleOnFocus() {
     document.querySelector('textarea#textForAmnalysis + div.invalid-feedback').style.display = 'none';
 }
+
+insertIntoTable(wordsObject) {
+
+}
+
 
 
 
