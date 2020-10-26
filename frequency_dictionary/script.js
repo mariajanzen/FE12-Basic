@@ -1,4 +1,6 @@
-function frequencyDictionary(str) {
+let frequencyDictionary;
+
+function generateFrequencyDictionary(str) {
     const dictionary = {};
 
     const wordsArray = wordsStringToArray(str);
@@ -12,7 +14,35 @@ function frequencyDictionary(str) {
             dictionary[wordsArray[i]] = 1;
         }
     }
-    return dictionary;
+
+    const dictionaryArray =[];
+    for (const word in dictionary) {
+        dictionaryArray.push(
+            {
+                word: word,
+                counter: dictionary[word]
+            }
+        );
+    }
+
+    return dictionaryArray;
+}
+
+function bubbleSort(inArray, comparator) {
+    const arr = [...inArray];
+    let unsorted = true;
+    while (unsorted) {
+        unsorted = false;
+        for (let i = 0; i < arr.length - 1; i++) {
+            if (comparator(arr[i].counter, arr[i + 1].counter) > 0) {
+                let temp = arr[i];
+                arr[i] = arr[i + 1];
+                arr[i + 1] = temp;
+                unsorted = true;
+            }
+        }
+    }
+    return arr;
 }
 
 function wordsStringToArray(str) {
@@ -22,7 +52,7 @@ function wordsStringToArray(str) {
         });
 }
 
-function onButtonClick() {
+function analyseAndInsertIntoTable() {
     const text = document.getElementById('textForAnalysis').value;
     if (text === '') {
         document.querySelector('.input-group div.invalid-feedback.empty').style.display = 'block';
@@ -32,7 +62,8 @@ function onButtonClick() {
         document.querySelector('.input-group div.invalid-feedback.minvalue').style.display = 'block';
         return;
     }
-    insertIntoTable(frequencyDictionary(text));
+    frequencyDictionary = generateFrequencyDictionary(text);
+    insertIntoTable(frequencyDictionary);
 }
 
 function handleOnFocus() {
@@ -41,10 +72,47 @@ function handleOnFocus() {
     }
 }
 
-function insertIntoTable(wordsObject) {
+
+function insertIntoTable(dictionaryArray) {
     const element = document.querySelector('table.table tbody');
-    /* <tr><th scope="row">1</th><td>this</td><td>20</td></tr> */
-    for (const word in wordsObject) {
-        console.log(word, wordsObject[word]);
+    let toBeInsorted = '';
+    let i = 1;
+    for (const word of dictionaryArray) {
+        toBeInsorted += `<tr><th scope="row">${i++}</th><td>${word.word}</td><td>${word.counter}</td></tr>`;
+
+    }
+    element.innerHTML = toBeInsorted;
+}
+
+function show(startNumber, endNumber, sorted) {
+    const comparators =  {
+        'topToBottom': function (a, b){
+            return a - b
+        },
+        'bottomToTop': function (a, b) {
+            return b - a
+        }
+    };
+
+    if(frequencyDictionary) {
+        if (sorted) {
+            insertIntoTable(bubbleSort(frequencyDictionary, comparators[sorted]).slice(startNumber, endNumber));
+        }else{
+            insertIntoTable(frequencyDictionary.slice(startNumber, endNumber));
+        }
     }
 }
+
+function showTop3() {
+    show(0, 3, 'bottomToTop');
+}
+
+function showBottom3() {
+    show(0, 3, 'topToBottom');
+}
+
+function showAll() {
+    show();
+}
+
+
