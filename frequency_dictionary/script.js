@@ -1,13 +1,5 @@
 let frequencyDictionary;
 
-const comparators = {
-    'bottomToTop': function(a, b) {
-        return a - b
-    },
-    'topToBottom': function(a, b) {
-        return b - a
-    }
-};
 
 function generateFrequencyDictionary(str) {
     const dictionary = {};
@@ -24,7 +16,7 @@ function generateFrequencyDictionary(str) {
         }
     }
 
-    const dictionaryArray = [];
+
     for (const word in dictionary) {
         dictionaryArray.push(
             {
@@ -81,12 +73,6 @@ function handleOnFocus() {
     }
 }
 
-function insertIntoTable(dictionaryArray) {
-    const element = document.querySelector('table.table tbody');
-    let toBeInserted = '';
-    let i = 1;
-    for (const word of dictionaryArray) {
-        toBeInserted += `<tr><th scope="row">${i++}</th><td>${word.word}</td><td>${word.counter}</td></tr>`;
     }
     element.innerHTML = toBeInserted;
 }
@@ -111,3 +97,17 @@ function showBottom3() {
 function showAll() {
     show();
 }
+
+function showTop3() {
+    show(0, 3, 'bottomToTop');
+}
+
+function showBottom3() {
+    show(0, 3, 'topToBottom');
+}
+
+function showAll() {
+    show();
+}
+
+
